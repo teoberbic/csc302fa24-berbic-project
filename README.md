@@ -22,6 +22,8 @@ The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and 
 ## File Structure
 
 
+
+```
 /src
 ├── apis/
 │   ├── ideas-api/
@@ -42,6 +44,9 @@ The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and 
 │   ├── index.html          # Homepage with calendar displaying to-do items
 │   └── todo.html           # To-do page with a similar structure to Ideas page
 └── router.php              # Routes client requests to the appropriate API endpoint
+```
+
+
 
 ## Installation
 
@@ -54,9 +59,16 @@ The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and 
 2. **Set up a local PHP server (or use XAMPP, WAMP, etc.)**:
 3. **Ensure SQLite is enabled on your PHP setup. This application uses an SQLite database to store ideas and to-do items**.
 
-## Database Setup
-Create an SQLite database: In your project root, create a new file named database.db.
-Create required tables by running the following SQL commands:
+# Database Setup
+
+## Create an SQLite Database
+1. In your project root, create a new file named `database.db`.
+
+## Create Required Tables
+Run the following SQL commands to set up the necessary tables:
+
+### `ideas` Table
+```sql
 CREATE TABLE IF NOT EXISTS ideas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -66,7 +78,9 @@ CREATE TABLE IF NOT EXISTS ideas (
     date_created TEXT DEFAULT CURRENT_TIMESTAMP,
     date_updated TEXT DEFAULT CURRENT_TIMESTAMP
 );
-
+```
+### `to-dos` Table
+```sql
 CREATE TABLE IF NOT EXISTS todos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -80,6 +94,8 @@ CREATE TABLE IF NOT EXISTS todos (
 
 Database connection: Update db_connection.php to point to your database file if necessary.
 
+```
+
 ## Usage
 Starting the Application: Launch your local server and navigate to the following URLs:
 index.html for the calendar view of your to-do items.
@@ -88,22 +104,87 @@ todo.html for managing to-do items.
 Adding, Updating, Deleting Items: Each page provides a form and buttons for adding, updating, and deleting items.
 Database Synchronization: JavaScript and AJAX are used to fetch items from the database on page load. Actions such as adding, updating, and deleting send AJAX requests to router.php, which routes requests to the corresponding API endpoints in /api.
 
-## API Endpoints
-Each API endpoint is located in the /api folder. These endpoints handle the core CRUD operations and return responses in JSON format.
-GET /router.php?action=getIdeas
-Retrieves all items from the ideas table.
-Response: JSON array of ideas.
-POST /router.php?action=addIdea
-Adds a new idea.
-Request body: JSON with name, description, category, and priority.
-Response: {"success": true} if successful.
-POST /router.php?action=updateIdea&id={id}
+# API Endpoints
+
+Each API endpoint is located in the `/api` folder. These endpoints handle the core CRUD operations and return responses in JSON format.
+
+## Endpoints
+
+### 1. **Retrieve Ideas**
+**GET** `/router.php?action=getIdeas`  
+Retrieves all items from the `ideas` table.  
+
+**Response**:  
+- JSON array of ideas.  
+```json
+[
+    {
+        "id": 1,
+        "name": "Idea Name",
+        "description": "Description of the idea",
+        "category": "Category",
+        "priority": 1,
+        "date_created": "2024-11-18 12:00:00",
+        "date_updated": "2024-11-18 12:00:00"
+    }
+```
+---
+
+### 2. **Add a New Idea**
+**POST** `/router.php?action=addIdea`  
+Adds a new idea.  
+
+**Request Body** (JSON):  
+```json
+{
+    "name": "New Idea Name",
+    "description": "Description of the new idea",
+    "category": "Category",
+    "priority": 1
+}
+```
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+### 3. **Update an Existing Idea**
+**POST** `/router.php?action=updateIdea&id={id}`  
 Updates an existing idea.
-Request body: JSON with name, description, category, and priority.
-Response: {"success": true} if successful.
-DELETE /router.php?action=deleteIdea&id={id}
-Deletes an idea by id.
-Response: {"success": true} if successful.
+**Request Body** (JSON):  
+```json
+{
+    "name": "Updated Idea Name",
+    "description": "Updated description",
+    "category": "Updated category",
+    "priority": 2
+}
+```
+
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+### 4. **Delete an Existing Idea**
+**POST** `/router.php?action=updateIdea&id={id}`  
+Updates an existing idea. 
+**Request Body**:  
+_No request body required._  
+
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+
+
 
 ## API Documentation
 | **Action**        | **HTTP Method** | **Endpoint**                            | **Request Parameters**                                                   | **Response Data (Success)**                                                                                   | **Response Data (Error)**                                                      |
