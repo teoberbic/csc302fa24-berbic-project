@@ -4,6 +4,9 @@ This web application is designed to track and manage ideas and to-do items for y
 
 The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and uses **SQLite** as the database.
 
+## Link for Digdug Server
+https://digdug.cs.endicott.edu/~tberbic/csc302/csc302Final/final.project/csc302fa24-berbic-project/
+
 ## Table of Contents
 1. [Features](#features)
 2. [File Structure](#file-structure)
