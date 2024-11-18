@@ -96,13 +96,25 @@ Database connection: Update db_connection.php to point to your database file if 
 
 ```
 
-## Usage
-Starting the Application: Launch your local server and navigate to the following URLs:
-index.html for the calendar view of your to-do items.
-ideas.html for managing ideas.
-todo.html for managing to-do items.
-Adding, Updating, Deleting Items: Each page provides a form and buttons for adding, updating, and deleting items.
-Database Synchronization: JavaScript and AJAX are used to fetch items from the database on page load. Actions such as adding, updating, and deleting send AJAX requests to router.php, which routes requests to the corresponding API endpoints in /api.
+# Usage
+
+## Starting the Application
+1. Launch your local server.
+2. Navigate to the following URLs for specific views:
+   - **`index.html`**: Calendar view of your to-do items.
+   - **`ideas.html`**: Manage your ideas.
+   - **`todo.html`**: Manage your to-do items.
+
+## Adding, Updating, and Deleting Items
+- Each page includes forms and buttons to add, update, and delete items.  
+- The interface allows for seamless management of ideas and to-do items.
+
+## Database Synchronization
+- JavaScript and AJAX handle data fetching and synchronization:
+  - On page load, items are fetched from the database.
+  - Actions such as adding, updating, and deleting send AJAX requests to `router.php`.
+  - These requests are routed to the appropriate API endpoints in the `/api` folder.
+
 
 # API Endpoints
 
@@ -195,16 +207,19 @@ _No request body required._
 | **Delete Idea**   | `DELETE`        | `/src/apis/ideas-api/delete.php`       | `id` (integer, required)                                                 | `{ "success": true, "message": "Idea deleted successfully" }`                                                    | `{ "success": false, "error": "Error message" }`                               |
 
 ## Data Model
-Client-Side Data
-On the client side, data is primarily stored in the browser, where it is used to manage form submissions, display data in tables, and handle user interactions.
 
-Idea Form Data
+### Client-Side Data
+- On the client side, data is primarily stored in the browser.
+- It is used to manage form submissions, display data in tables, and handle user interactions.
+
+### Idea Form Data
 When a user submits a new idea or updates an existing one, the following data is collected:
 
-Name (string): The name or title of the idea.
-Description (string): A description of the idea.
-Category (string): The category the idea belongs to (e.g., 'Marketing', 'Development').
-Priority (string): The action priority level of the idea (e.g., 'Low', 'Medium', 'High').
+- **Name** *(string)*: The name or title of the idea.
+- **Description** *(string)*: A description of the idea.
+- **Category** *(string)*: The category the idea belongs to (e.g., 'Marketing', 'Development').
+- **Priority** *(string)*: The action priority level of the idea (e.g., 'Low', 'Medium', 'High').
+
 
 ## Contributing
 Contributions are welcome! Feel free to fork the project and submit a pull request, or suggest new features by opening an issue.
