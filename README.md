@@ -4,6 +4,11 @@ This web application is designed to track and manage ideas and to-do items for y
 
 The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and uses **SQLite** as the database.
 
+## Link for Digdug Server
+```bash
+https://digdug.cs.endicott.edu/~tberbic/csc302/csc302Final/final.project/csc302fa24-berbic-project/src/public
+```
+
 ## Table of Contents
 1. [Features](#features)
 2. [File Structure](#file-structure)
@@ -22,6 +27,8 @@ The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and 
 ## File Structure
 
 
+
+```
 /src
 ├── apis/
 │   ├── ideas-api/
@@ -42,6 +49,9 @@ The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and 
 │   ├── index.html          # Homepage with calendar displaying to-do items
 │   └── todo.html           # To-do page with a similar structure to Ideas page
 └── router.php              # Routes client requests to the appropriate API endpoint
+```
+
+
 
 ## Installation
 
@@ -54,9 +64,16 @@ The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and 
 2. **Set up a local PHP server (or use XAMPP, WAMP, etc.)**:
 3. **Ensure SQLite is enabled on your PHP setup. This application uses an SQLite database to store ideas and to-do items**.
 
-## Database Setup
-Create an SQLite database: In your project root, create a new file named database.db.
-Create required tables by running the following SQL commands:
+# Database Setup
+
+## Create an SQLite Database
+1. In your project root, create a new file named `database.db`.
+
+## Create Required Tables
+Run the following SQL commands to set up the necessary tables:
+
+### `ideas` Table
+```sql
 CREATE TABLE IF NOT EXISTS ideas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -66,7 +83,9 @@ CREATE TABLE IF NOT EXISTS ideas (
     date_created TEXT DEFAULT CURRENT_TIMESTAMP,
     date_updated TEXT DEFAULT CURRENT_TIMESTAMP
 );
-
+```
+### `to-dos` Table
+```sql
 CREATE TABLE IF NOT EXISTS todos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
@@ -80,30 +99,109 @@ CREATE TABLE IF NOT EXISTS todos (
 
 Database connection: Update db_connection.php to point to your database file if necessary.
 
-## Usage
-Starting the Application: Launch your local server and navigate to the following URLs:
-index.html for the calendar view of your to-do items.
-ideas.html for managing ideas.
-todo.html for managing to-do items.
-Adding, Updating, Deleting Items: Each page provides a form and buttons for adding, updating, and deleting items.
-Database Synchronization: JavaScript and AJAX are used to fetch items from the database on page load. Actions such as adding, updating, and deleting send AJAX requests to router.php, which routes requests to the corresponding API endpoints in /api.
+```
 
-## API Endpoints
-Each API endpoint is located in the /api folder. These endpoints handle the core CRUD operations and return responses in JSON format.
-GET /router.php?action=getIdeas
-Retrieves all items from the ideas table.
-Response: JSON array of ideas.
-POST /router.php?action=addIdea
-Adds a new idea.
-Request body: JSON with name, description, category, and priority.
-Response: {"success": true} if successful.
-POST /router.php?action=updateIdea&id={id}
+# Usage
+
+## Starting the Application
+1. Launch your local server.
+2. Navigate to the following URLs for specific views:
+   - **`index.html`**: Calendar view of your to-do items.
+   - **`ideas.html`**: Manage your ideas.
+   - **`todo.html`**: Manage your to-do items.
+
+## Adding, Updating, and Deleting Items
+- Each page includes forms and buttons to add, update, and delete items.  
+- The interface allows for seamless management of ideas and to-do items.
+
+## Database Synchronization
+- JavaScript and AJAX handle data fetching and synchronization:
+  - On page load, items are fetched from the database.
+  - Actions such as adding, updating, and deleting send AJAX requests to `router.php`.
+  - These requests are routed to the appropriate API endpoints in the `/api` folder.
+
+
+# API Endpoints
+
+Each API endpoint is located in the `/api` folder. These endpoints handle the core CRUD operations and return responses in JSON format.
+
+## Endpoints
+
+### 1. **Retrieve Ideas**
+**GET** `/router.php?action=getIdeas`  
+Retrieves all items from the `ideas` table.  
+
+**Response**:  
+- JSON array of ideas.  
+```json
+[
+    {
+        "id": 1,
+        "name": "Idea Name",
+        "description": "Description of the idea",
+        "category": "Category",
+        "priority": 1,
+        "date_created": "2024-11-18 12:00:00",
+        "date_updated": "2024-11-18 12:00:00"
+    }
+```
+---
+
+### 2. **Add a New Idea**
+**POST** `/router.php?action=addIdea`  
+Adds a new idea.  
+
+**Request Body** (JSON):  
+```json
+{
+    "name": "New Idea Name",
+    "description": "Description of the new idea",
+    "category": "Category",
+    "priority": 1
+}
+```
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+### 3. **Update an Existing Idea**
+**POST** `/router.php?action=updateIdea&id={id}`  
 Updates an existing idea.
-Request body: JSON with name, description, category, and priority.
-Response: {"success": true} if successful.
-DELETE /router.php?action=deleteIdea&id={id}
-Deletes an idea by id.
-Response: {"success": true} if successful.
+**Request Body** (JSON):  
+```json
+{
+    "name": "Updated Idea Name",
+    "description": "Updated description",
+    "category": "Updated category",
+    "priority": 2
+}
+```
+
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+### 4. **Delete an Existing Idea**
+**POST** `/router.php?action=updateIdea&id={id}`  
+Updates an existing idea. 
+**Request Body**:  
+_No request body required._  
+
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+
+
 
 ## API Documentation
 | **Action**        | **HTTP Method** | **Endpoint**                            | **Request Parameters**                                                   | **Response Data (Success)**                                                                                   | **Response Data (Error)**                                                      |
@@ -114,16 +212,19 @@ Response: {"success": true} if successful.
 | **Delete Idea**   | `DELETE`        | `/src/apis/ideas-api/delete.php`       | `id` (integer, required)                                                 | `{ "success": true, "message": "Idea deleted successfully" }`                                                    | `{ "success": false, "error": "Error message" }`                               |
 
 ## Data Model
-Client-Side Data
-On the client side, data is primarily stored in the browser, where it is used to manage form submissions, display data in tables, and handle user interactions.
 
-Idea Form Data
+### Client-Side Data
+- On the client side, data is primarily stored in the browser.
+- It is used to manage form submissions, display data in tables, and handle user interactions.
+
+### Idea Form Data
 When a user submits a new idea or updates an existing one, the following data is collected:
 
-Name (string): The name or title of the idea.
-Description (string): A description of the idea.
-Category (string): The category the idea belongs to (e.g., 'Marketing', 'Development').
-Priority (string): The action priority level of the idea (e.g., 'Low', 'Medium', 'High').
+- **Name** *(string)*: The name or title of the idea.
+- **Description** *(string)*: A description of the idea.
+- **Category** *(string)*: The category the idea belongs to (e.g., 'Marketing', 'Development').
+- **Priority** *(string)*: The action priority level of the idea (e.g., 'Low', 'Medium', 'High').
+
 
 ## Contributing
 Contributions are welcome! Feel free to fork the project and submit a pull request, or suggest new features by opening an issue.
@@ -157,3 +258,10 @@ This project’s structure and functionality were inspired by the Quire task man
 - [ ] Style the front-end (CSS/Bootstrap)
 - [ ] Test the full flow from front-end to back-end
 - [ ] Set up database migrations and schema
+
+## Revision Features 
+
+- [ ] Delete data.db from root of server
+- [ ] Mark use of code from external sources
+- [ ] Revise certain code
+- [ ] Have a deeper understanding of what to do going forward
