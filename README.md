@@ -256,3 +256,10 @@ This project’s structure and functionality were inspired by the Quire task man
 - [ ] Style the front-end (CSS/Bootstrap)
 - [ ] Test the full flow from front-end to back-end
 - [ ] Set up database migrations and schema
+
+## Revision Features 
+
+- [ ] Delete data.db from root of server
+- [ ] Mark use of code from external sources
+- [ ] Revise certain code
+- [ ] Have a deeper understanding of what to do going forward
