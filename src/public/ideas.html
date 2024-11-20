@@ -152,10 +152,14 @@
         <input type="text" id="description" name="description" required><br>
     
         <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required><br>
+        <select id="category" name="category">
+            <option value="Social Media Posts">Social Media Posts</option>
+            <option value="Current Clothing Drop">Current Clothing Drop</option>
+            <option value="Next Clothing Drop">Next Clothing Drop</option>
+          </select>
     
         <label for="priority">Action Priority:</label>
-        <input type="text" id="priority" name="priority" required><br>
+        <input type="text" id="action_priority" name="priority" required><br>
     
         <button type="button" id="add-idea">Add Idea</button>
         <button type="button" id="update-idea">Update Selected Idea</button>

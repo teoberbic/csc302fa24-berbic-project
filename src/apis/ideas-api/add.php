@@ -29,6 +29,7 @@ function addIdea($ideaId, $name, $description, $category, $action_priority) {
             ':description' => $description,
             ':category' => $category,
             ':action_priority' => $action_priority
+            
         ]);
 
         // Get the last inserted ID to confirm success

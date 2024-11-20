@@ -30,7 +30,7 @@ switch ($category) {
                     $data['name'],
                     $data['description'],
                     $data['category'],
-                    $data['action_priority']));
+                    $data['priority']));
                 break;
             case 'delete':
                 deleteIdea();

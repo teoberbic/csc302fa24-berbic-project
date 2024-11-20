@@ -4,6 +4,7 @@
 // create one if it can't find it.
 $dbName = 'data.db';
 
+
 // Leave this alone. It checks if you have a directory named www-data in
 // you home directory (on a *nix server). If so, the database file is
 // sought/created there. Otherwise, it uses the current directory.
@@ -55,8 +56,9 @@ try {
         'createdAt datetime default(datetime()), ' .
         'updatedAt datetime default(datetime()))');
     } catch (PDOException $e) {
-        echo "There was an error creating the Users table: " . $e->getMessage();
+        echo "There was an error creating the Ideas Table: " . $e->getMessage();
     }
+
 
 // Create the ToDo table.
 // try {
@@ -66,7 +68,7 @@ try {
 //         'question text, ' .
 //         'answer text, ' .
 //         'createdAt datetime default(datetime()), ' .
-//         'updatedAt datetime default(datetime()))'); // Added closing parenthesis here
+//         'updatedAt datetime default(datetime()))'); 
 // } catch (PDOException $e) {
 //     echo "There was an error creating the QuizItems table: " . $e->getMessage();
 // }

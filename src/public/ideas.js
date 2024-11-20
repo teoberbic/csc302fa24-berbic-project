@@ -58,8 +58,8 @@ function renderTable(ideas) {
           <td>${idea.description}</td>
           <td>${idea.category}</td>
           <td>${idea.action_priority}</td>
-          <td>${idea.date_created}</td>
-          <td>${idea.date_updated}</td>
+          <td>${idea.createdAt}</td>
+          <td>${idea.updatedAt}</td>
           <td><button onclick="selectIdea(${idea.id})">Select</button></td>
       `;
       tableBody.appendChild(row);
@@ -69,11 +69,10 @@ function renderTable(ideas) {
 
 // Add a new idea
 function addIdea() {
-  console.log("got here");
   const name = document.getElementById("name").value;
   const description = document.getElementById("description").value;
   const category = document.getElementById("category").value;
-  const priority = document.getElementById("priority").value;
+  const priority = document.getElementById("action_priority").value;
   const xhr = new XMLHttpRequest();
   xhr.open("POST", "../router.php?action=add&category=ideas", true);
   xhr.setRequestHeader("Content-Type", "application/json");
