@@ -1,7 +1,12 @@
 <?php
-
-// TODO Change this as needed. SQLite will look for a file with this name, or
-// create one if it can't find it.
+/*
+File Name: db.php
+Description: Initializes an SQLite database, creates the IdeasTable, and ensures server compatibility with error handling.
+Sources: 
+    - Quizzer PDO Code (for creating SQL tables)
+    - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code)
+*/
+// SQLite will look for a file with this name, or create one if it can't find it.
 $dbName = 'data.db';
 
 

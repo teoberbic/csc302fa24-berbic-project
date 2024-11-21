@@ -1,4 +1,12 @@
 <?php
+/*
+File Name: router.php
+Description: The router php that redirects requests to specific API action handlers.
+Sources: 
+    - https://chatgpt.com (null coalescing operator (?? operator) as cleaner alternative to if-else)
+    - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code)
+
+*/
 header('Content-Type: application/json');
 
 // Include necessary files
@@ -22,21 +30,33 @@ switch ($category) {
             case 'add':
                 // Reads the raw JSON data from the request body.
                 // Decodes this JSON into a PHP associative array, which is stored in $data.
+            
+                
                 $data = json_decode(file_get_contents("php://input"), true); 
                 
                 // Pass the decoded data to the addIdea function
                 echo json_encode(addIdea(
-                    $data['ideaId'] ?? null,  // Assuming you might want to use this in the future
+                    $data['ideaId'] ?? null,  // If i want to add sub-ideas, i can use this field
                     $data['name'],
                     $data['description'],
                     $data['category'],
                     $data['priority']));
-                break;
+                
+                    break;
             case 'delete':
+
                 deleteIdea();
                 break;
             case 'update':
-                updateIdea();
+                $data = json_decode(file_get_contents("php://input"), true); 
+                
+                // Pass the decoded data to the addIdea function
+                echo json_encode(updateIdea(
+                    $data['ideaId'] ?? null,  // If i want to add sub-ideas, i can use this field
+                    $data['name'],
+                    $data['description'],
+                    $data['category'],
+                    $data['priority']));
                 break;
             case 'get':
                 echo getIdeas();

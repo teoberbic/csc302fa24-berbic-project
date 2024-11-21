@@ -1,3 +1,13 @@
+<!--
+File Name: ideas.html
+Description: This is the ideas page for the project.
+Sources: 
+    - https://chatgpt.com (for CSS styling & this header comment)
+    - https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js (for JQuery library)
+    - https://www.w3schools.com/html/html_table_headers.asp (for table styling)
+    - Quizzer project (for for forms template)
+    - https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/for ("for" attribute for clearer separation of labels and inputs code and misclicking in the form)
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +17,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="ideas.js"></script>
     <style>
-        /* General body styling */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #fafafa;
@@ -125,7 +134,7 @@
 </head>
 <body>
     <h1>Ideas</h1>
- 
+    <!--For Column names-->
     <table id="ideas-table">
         <thead>
           <tr>
@@ -139,16 +148,18 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Table rows will be populated here by JS -->
+          <!-- Table data rows will be populated here by JS -->
         </tbody>
       </table>
     
       <h3>Add or Update Idea</h3>
+
       <form id="idea-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br>
     
         <label for="description">Description:</label>
+        <!--name='' used for form var identifying-->
         <input type="text" id="description" name="description" required><br>
     
         <label for="category">Category:</label>
@@ -165,5 +176,6 @@
         <button type="button" id="update-idea">Update Selected Idea</button>
         <button type="button" id="remove-idea">Remove Selected Idea</button>
       </form>
+      
 </body>
 </html>
