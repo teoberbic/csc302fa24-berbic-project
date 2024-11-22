@@ -6,7 +6,7 @@ The application is built with **PHP**, **JavaScript (AJAX)**, **HTML/CSS**, and 
 
 ## Link for Digdug Server
 ```bash
-https://digdug.cs.endicott.edu/~tberbic/csc302/csc302Final/final.project/csc302fa24-berbic-project/src/public
+https://digdug.cs.endicott.edu/~tberbic/csc302/final.project/csc302fa24-berbic-project/src/public/index.html
 ```
 
 ## Table of Contents
