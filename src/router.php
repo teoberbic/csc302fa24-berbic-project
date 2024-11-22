@@ -22,6 +22,7 @@ require_once 'apis/todo-api/get.php';
 // Get the action and category from the request
 $action = $_GET['action'] ?? '';
 $category = $_GET['category'] ?? ''; // 'ideas' or 'todo'
+$id = $_GET['id'] ?? null; // Capture the selected id from the URL
 
 // Route based on the action and category
 switch ($category) {
@@ -43,24 +44,34 @@ switch ($category) {
                     $data['priority']));
                 
                     break;
-            case 'delete':
+           
+           
+                case 'update':
+                if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                    $data = json_decode(file_get_contents("php://input"), true); 
+                    // Pass the decoded data and id to the updateIdea function
+                    echo json_encode(updateIdea(
+                        $id,  // Use the captured id
+                        $data['name'],
+                        $data['description'],
+                        $data['category'],
+                        $data['priority']));
+                } else {
+                    http_response_code(405);
+                    echo json_encode(['message' => 'Method not allowed']);
+                }
+                break;
 
-                deleteIdea();
-                break;
-            case 'update':
-                $data = json_decode(file_get_contents("php://input"), true); 
-                
-                // Pass the decoded data to the addIdea function
-                echo json_encode(updateIdea(
-                    $data['ideaId'] ?? null,  // If i want to add sub-ideas, i can use this field
-                    $data['name'],
-                    $data['description'],
-                    $data['category'],
-                    $data['priority']));
-                break;
+
             case 'get':
                 echo getIdeas();
                 break;
+
+            case 'delete':
+                echo json_encode(deleteIdea($id));
+                break;
+                break;
+
             default:
                 http_response_code(404);
                 echo json_encode(['message' => 'Action not found for ideas']);

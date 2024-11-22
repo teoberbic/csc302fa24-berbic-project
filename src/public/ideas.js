@@ -101,33 +101,36 @@ function selectIdea(id) {
                         const button = row.querySelector("button");
                         return button && button.getAttribute("onclick") === `selectIdea(${id})`;
                       });
+                      // This function finds a specific table row (<tr>) in the table with the ID "ideas-table", 
+                      //where a button inside the row has an onclick attribute matching the string selectIdea(${id}). 
+                      //The ID is passed as an argument to the function.
 
   if (!idea) {
     console.error(`Idea with ID ${id} not found.`);
     return;
   }
 
-  // Populate the form fields with the idea's details
+  // Populate the form fields with the selected idea's data
   document.getElementById("name").value = idea.cells[0].textContent;
   document.getElementById("description").value = idea.cells[1].textContent;
   document.getElementById("category").value = idea.cells[2].textContent;
-  document.getElementById("action_priority").value = parseInt(idea.cells[3].textContent, 10);
+  document.getElementById("action_priority").value = idea.cells[3].textContent;
 }
 
 // Update an existing idea
 function updateIdea() {
   if (!selectedIdeaId) {
-    alert("Please select an idea to update.");
+    console.log("Please select an idea to update.");
     return;
   }
 
   const name = document.getElementById("name").value;
   const description = document.getElementById("description").value;
   const category = document.getElementById("category").value;
-  const priority = document.getElementById("priority").value;
+  const priority = document.getElementById("action_priority").value;
 
   $.ajax({
-    url: `/router.php?action=updateIdea&id=${selectedIdeaId}`,
+    url: `../router.php?action=update&category=ideas&id=${selectedIdeaId}`,
     method: 'PUT',
     contentType: 'application/json',
     data: JSON.stringify({ name, description, category, priority }),
@@ -146,7 +149,7 @@ function removeIdea() {
   }
 
   $.ajax({
-    url: `/router.php?action=deleteIdea&id=${selectedIdeaId}`,
+    url: `/router.php?action=delete&category=ideas&id=${selectedIdeaId}`,
     method: 'DELETE',
     success: function() {
       fetchIdeas(); // Refresh table

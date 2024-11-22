@@ -37,7 +37,7 @@ function addIdea($ideaId, $name, $description, $category, $action_priority) {
 
         $id = $dbh->lastInsertId();
 
-        return json_encode(['success' => true, 'id' => $id]);
+        return json_encode(['success (item added)' => true, 'id' => $id]);
 
     } catch (PDOException $e) {
         return json_encode(['success' => false, 'error' => "Error adding idea: " . $e->getMessage()]);
