@@ -5,7 +5,9 @@ Description: Initializes an SQLite database, creates the IdeasTable, and ensures
 Sources: 
     - Quizzer PDO Code (for creating SQL tables)
     - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code)
+    - https://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/ (for understanding the high level structure of hierarchical parent child relationships in relational databases)
 */
+
 // SQLite will look for a file with this name, or create one if it can't find it.
 $dbName = 'data.db';
 
@@ -26,6 +28,10 @@ $dbh = new PDO("sqlite:$dataDir/$dbName");
 // Set our PDO instance to raise exceptions when errors are encountered.
 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// tells the database that i can have child items connected to my parent items
+$dbh->exec('PRAGMA foreign_keys = ON;'); // Without this, SQLite will not look at foreign keys 
+// This will enable a cascading delete so ff you delete a parent item, the database can automatically delete all its child items.
+
 
 /**
  * Returns an associative array with two fields:
@@ -44,8 +50,7 @@ function error($message){
 /**
  * Creates all of the tables for this project:
  *  - IdeasTable
- *  - ToDo
- *  - 
+ *  - ToDoTable
  */
 function createTables(){
     global $dbh;
@@ -65,24 +70,21 @@ try {
     }
 
 
-// Create the ToDo table.
-// try {
-//     $dbh->exec('create table if not exists ToDoTable(' .
-//         'id integer primary key autoincrement, ' .
-//         'quizId int, ' .
-//         'question text, ' .
-//         'answer text, ' .
-//         'createdAt datetime default(datetime()), ' .
-//         'updatedAt datetime default(datetime()))'); 
-// } catch (PDOException $e) {
-//     echo "There was an error creating the QuizItems table: " . $e->getMessage();
-// }
+// Create the ToDoTable
+try {
+    $dbh->exec('create table if not exists ToDoTable(' .
+        'id integer primary key autoincrement, ' .
+        'title text not null, ' .
+        'completed boolean default false, ' .
+        'parent_id integer, ' .
+        'foreign key (parent_id) references ToDoTable(id) on delete cascade)');
+} catch (PDOException $e) {
+    echo "There was an error creating the ToDoTable: " . $e->getMessage();
+}
+
 
 
 }
 createTables();
-
-
-
 
 ?>

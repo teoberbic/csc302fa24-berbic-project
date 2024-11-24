@@ -6,7 +6,7 @@ Sources:
     - Quizzer PDO Code (for preparing and executing SQL statements)
     - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code)
 */
-require_once __DIR__ . '/../../db/db.php';
+require_once __DIR__ . '/../../db/db.php'; // Had to change the path to this format because it wasnt working in standard format
 header('Content-Type: application/json');
 
 /**

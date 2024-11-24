@@ -2,10 +2,10 @@
 <?php
 /*
 File Name: update.php
-Description: The router php f.
+Description: Handles updating an existing idea in the IdeasTable.
 Sources: 
     - Quizzer PDO Code (for preparing and excecuting SQL statements)
-    - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code)
+    - https://www.sqlitetutorial.net/sqlite-update/ (for updating a row in a table)
 */
 require_once __DIR__ . '/../../db/db.php';
 header('Content-Type: application/json');

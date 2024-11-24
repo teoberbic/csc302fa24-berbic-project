@@ -4,7 +4,7 @@ File Name: router.php
 Description: The router php that redirects requests to specific API action handlers.
 Sources: 
     - https://chatgpt.com (null coalescing operator (?? operator) as cleaner alternative to if-else)
-    - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code)
+    - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code) 
 
 */
 header('Content-Type: application/json');
@@ -47,7 +47,7 @@ switch ($category) {
            
            
                 case 'update':
-                if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                
                     $data = json_decode(file_get_contents("php://input"), true); 
                     // Pass the decoded data and id to the updateIdea function
                     echo json_encode(updateIdea(
@@ -56,10 +56,6 @@ switch ($category) {
                         $data['description'],
                         $data['category'],
                         $data['priority']));
-                } else {
-                    http_response_code(405);
-                    echo json_encode(['message' => 'Method not allowed']);
-                }
                 break;
 
 
@@ -91,7 +87,7 @@ switch ($category) {
                 updateTodo();
                 break;
             case 'get':
-                getTodos();
+                echo json_encode(fetchTodos());
                 break;
             default:
                 http_response_code(404);
