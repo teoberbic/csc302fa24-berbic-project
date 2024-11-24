@@ -237,11 +237,14 @@ This project’s structure and functionality were inspired by the Quire task man
 
 ## Ideas Feature 80%
 
-- [ ] Create a form to input idea data
-- [ ] Send the form data to the server using AJAX
-- [ ] Add server-side logic to handle adding ideas to the database
-- [ ] Show new ideas in the table once added
-- [ ] Test the feature
+- [x] Create a form to input idea data
+- [x] Send the form data to the server using AJAX
+- [x] Add server-side logic to handle adding ideas to the database
+- [x] Show new ideas in the table once added
+- [x] Test add feature
+- [x] Test select feature
+- [ ] Test update feature
+- [ ] Test del feature
 
 ## To-Do List Feature 20%
 
