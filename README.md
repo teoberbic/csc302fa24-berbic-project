@@ -74,24 +74,24 @@ Run the following SQL commands to set up the necessary tables:
 
 ### `ideas` Table
 ```sql
-CREATE TABLE IF NOT EXISTS ideas (
+CREATE TABLE IF NOT EXISTS IdeasTable (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT,
     category TEXT,
-    priority INTEGER,
+    action_priority INTEGER,
     date_created TEXT DEFAULT CURRENT_TIMESTAMP,
     date_updated TEXT DEFAULT CURRENT_TIMESTAMP
 );
 ```
 ### `to-dos` Table
 ```sql
-CREATE TABLE IF NOT EXISTS todos (
+CREATE TABLE IF NOT EXISTS ToDoTable (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    description TEXT,
-    due_date TEXT,
+    title TEXT NOT NULL,
     completed INTEGER DEFAULT 0,
+    parent_id integer,
+    foreign key (parent_id) references ToDoTable(id) on delete cascade,
     date_created TEXT DEFAULT CURRENT_TIMESTAMP,
     date_updated TEXT DEFAULT CURRENT_TIMESTAMP
 );
@@ -125,7 +125,7 @@ Database connection: Update db_connection.php to point to your database file if 
 
 Each API endpoint is located in the `/api` folder. These endpoints handle the core CRUD operations and return responses in JSON format.
 
-## Endpoints
+## Idea Endpoints
 
 ### 1. **Retrieve Ideas**
 **GET** `/router.php?action=getIdeas`  
@@ -201,17 +201,101 @@ _No request body required._
 }
 ```
 
+## Todo Endpoints
+
+### 1. **Retrieve Todos**
+**GET** `/router.php?action=get`  
+Retrieves all items from the `TodoTable`.  
+
+**Response**:  
+- JSON array of ideas.  
+```json
+[
+    {
+        "id": 1,
+        "title": "To Do Name",
+        "parent_id": "Parent of the To Do (if any)",
+        "completed": "false",
+        "date_created": "2024-11-18 12:00:00",
+        "date_updated": "2024-11-18 12:00:00"
+    }
+```
+---
+
+### 2. **Add a New Todo**
+**POST** `/router.php?action=add`  
+Adds a new todo.  
+
+**Request Body** (JSON):  
+```json
+{
+    "title": "New To Do Name",
+    "parent_id": "Parent of the To Do (if any)",
+}
+```
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+### 3. **Update an Existing Todo**
+**POST** `/router.php?action=update&id={id}`  
+Updates an existing todo.
+**Request Body** (JSON):  
+```json
+{
+    "title": "Updated Todo Name",
+    "Completed": "Updated status",
+}
+```
+
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
+### 4. **Delete an Existing Idea**
+**POST** `/router.php?action=delete&id={id}`  
+Updates an existing idea. 
+**Request Body**:  
+```json
+{
+    "id": "todo id"
+}
+```
+
+**Response**:  
+- A success message.  
+```json
+{
+    "success": true
+}
+```
 
 
-## API Documentation
+
+## API Documentation Ideas
 | **Action**        | **HTTP Method** | **Endpoint**                            | **Request Parameters**                                                   | **Response Data (Success)**                                                                                   | **Response Data (Error)**                                                      |
 |-------------------|-----------------|----------------------------------------|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
-| **Add Idea**      | `POST`          | `/src/apis/ideas-api/add.php`          | `name` (string, required), `description` (string, required), `category` (string, required), `priority` (string, required) | `{ "success": true, "id": 123 }`                                                                               | `{ "success": false, "error": "Error message" }`                               |
-| **Get Ideas**     | `GET`           | `/src/apis/ideas-api/get.php`          | None (Optionally, filtering parameters like `category`, `priority`)      | `[ { "id": 1, "name": "Idea 1", "description": "Description", "category": "Category 1", "priority": "High", "created_at": "2024-11-01", "updated_at": "2024-11-02" } ]` | `{ "success": false, "error": "Error message" }`                               |
-| **Update Idea**   | `PUT`           | `/src/apis/ideas-api/update.php`       | `id` (integer, required), `name` (string, optional), `description` (string, optional), `category` (string, optional), `priority` (string, optional) | `{ "success": true, "id": 1 }`                                                                                  | `{ "success": false, "error": "Error message" }`                               |
-| **Delete Idea**   | `DELETE`        | `/src/apis/ideas-api/delete.php`       | `id` (integer, required)                                                 | `{ "success": true, "message": "Idea deleted successfully" }`                                                    | `{ "success": false, "error": "Error message" }`                               |
+| **Add Idea**      | `POST`          | `router.php?action=add&category=ideas`          | `name` (string, required), `description` (string, required), `category` (string, required), `priority` (string, required) | `{ "success": true, "id": 123 }`                                                                               | `{ "success": false, "error": "Error message" }`                               |
+| **Get Ideas**     | `GET`           | `router.php?action=get&category=ideas`          | None (Optionally, filtering parameters like `category`, `priority`)      | `[ { "id": 1, "name": "Idea 1", "description": "Description", "category": "Category 1", "priority": "High", "created_at": "2024-11-01", "updated_at": "2024-11-02" } ]` | `{ "success": false, "error": "Error message" }`                               |
+| **Update Idea**   | `PUT`           | `router.php?action=update&category=ideas`       | `id` (integer, required), `name` (string, optional), `description` (string, optional), `category` (string, optional), `priority` (string, optional) | `{ "success": true, "id": 1 }`                                                                                  | `{ "success": false, "error": "Error message" }`                               |
+| **Delete Idea**   | `DELETE`        | `router.php?action=delete&category=ideas`       | `id` (integer, required)                                                 | `{ "success": true, "message": "Idea deleted successfully" }`                                                    | `{ "success": false, "error": "Error message" }`                               |
 
-## Data Model
+## API Documentation Todo
+| **Action**        | **HTTP Method** | **Endpoint**                            | **Request Parameters**                                                   | **Response Data (Success)**                                                                                   | **Response Data (Error)**                                                      |
+|-------------------|-----------------|----------------------------------------|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| **Add Todo**      | `POST`          | `router.php?action=add&category=todo`          | `title` (string, required), `parent_id` (integer, optional) | `{ "success": true, "id": 123 }`                                                                               | `{ "success": false, "error": "Error message" }`                               |
+| **Get Todos**     | `GET`           | `router.php?action=get&category=todo`          |       | `[ { "id": 1, "title": "Idea 1", "completed": "false", "parent_id": "null", "created_at": "2024-11-01", "updated_at": "2024-11-02" } ]` | `{ "success": false, "error": "Error message" }`                               |
+| **Update Todo**   | `PUT`           | `router.php?action=update&category=todo`       | `title` (string, required), `parent_id` (integer, optional), "completed": "false" | `{ "success": true, "id": 1 }`                                                                                  | `{ "success": false, "error": "Error message" }`                               |
+| **Delete Todo**   | `DELETE`        | `router.php?action=delete&category=todo`       | `id` (integer, required)                                                 | `{ "success": true, "message": "Idea deleted successfully" }`                                                    | `{ "success": false, "error": "Error message" }`                               |
+
+
+## Data Model Ideas
 
 ### Client-Side Data
 - On the client side, data is primarily stored in the browser.
@@ -225,17 +309,39 @@ When a user submits a new idea or updates an existing one, the following data is
 - **Category** *(string)*: The category the idea belongs to (e.g., 'Marketing', 'Development').
 - **Priority** *(string)*: The action priority level of the idea (e.g., 'Low', 'Medium', 'High').
 
+## Data Model Todo
 
-## Contributing
-Contributions are welcome! Feel free to fork the project and submit a pull request, or suggest new features by opening an issue.
+### Client-Side Data
+- On the client side, data is primarily stored in the browser
+- It is used to manage form submissions, display data in lists, and handle user interactions.
 
-## License
-This project is licensed under the TB License. See LICENSE for details.
+### Todo Form Data
+When a user submits a new to-do item or updates an existing one, the following data is collected:
+
+- **Title** *(string)*: The title of the to-do item.
+- **Completed** *(boolean)*: Indicates whether the to-do item has been completed.
+- **Parent ID** *(integer, optional)*: The ID of the parent to-do item for hierarchical structuring.
+
+#### Data Relationships
+**Hierarchical Structure:** To-do items can have a parent-child relationship, enabling nested tasks. The Parent ID field establishes this relationship.
+**Status Tracking:** The Completed field allows tracking whether a task is done.
+
+## Testing
+- **UI Testing:** Verified the functionality and appearance of the user interface by manually interacting with it.
+Tested workflows like adding, editing, and deleting items in the ideas list.
+Checked that buttons and item structures worked as expected.
+Ensured error handling for invalid inputs and actions was displayed correctly.
+- **Data Flow Testing:** Tested the flow of data between the frontend and backend APIs.
+Verified that data entered through the UI was correctly sent to the backend (e.g., adding or updating items).
+Ensured that responses from the backend were sent back in the console.
+Checked for consistency when data was updated or deleted at different stages in the application.
+- **Testing w/ External Resources:** (N/A YET)
+   - **UI Testing w/ Selenium:** (N/A YET)
 
 ## Acknowledgments
-This project’s structure and functionality were inspired by the Quire task management system, adapted for brand analytics with additional customization.
+This project’s structure and functionality were inspired by the Quire task management system, adapted for brand analytics with additional customization by using many outside sources for resource help.
 
-## Ideas Feature 80%
+## Ideas Feature 95%
 
 - [x] Create a form to input idea data
 - [x] Send the form data to the server using AJAX
@@ -243,28 +349,28 @@ This project’s structure and functionality were inspired by the Quire task man
 - [x] Show new ideas in the table once added
 - [x] Test add feature
 - [x] Test select feature
-- [ ] Test update feature
-- [ ] Test del feature
+- [x] Test update feature
+- [x] Test del feature
+- [ ] Style page better
+- [ ] Add buttons to different pages
 
-## To-Do List Feature 20%
+## To-Do List Feature 50%
+
+- [x] Implement idea creation form
+- [x] Have all template blueprint code setup from front to backend (full flow)
+- [ ] Integrate idea CRUD functionality
+   - [ ] Add feature works
+   - [x] Fetch Feature works
+   - [ ] Delete Feature works
+   - [ ] Update Feature works
+- [ ] Style the front-end better (CSS)
+- [ ] Test the full flow from front-end to back-end
+- [x] Set up database migrations and schema
+
+## Calendar Feature TBD (if I am working on this or not)
 
 - [ ] Implement idea creation form
 - [ ] Integrate idea CRUD functionality (create, read, update, delete)
 - [ ] Style the front-end (CSS/Bootstrap)
 - [ ] Test the full flow from front-end to back-end
 - [ ] Set up database migrations and schema
-
-## Calendar Feature 10%
-
-- [ ] Implement idea creation form
-- [ ] Integrate idea CRUD functionality (create, read, update, delete)
-- [ ] Style the front-end (CSS/Bootstrap)
-- [ ] Test the full flow from front-end to back-end
-- [ ] Set up database migrations and schema
-
-## Revision Features 
-
-- [ ] Delete data.db from root of server
-- [ ] Mark use of code from external sources
-- [ ] Revise certain code
-- [ ] Have a deeper understanding of what to do going forward
