@@ -335,7 +335,18 @@ Ensured error handling for invalid inputs and actions was displayed correctly.
 Verified that data entered through the UI was correctly sent to the backend (e.g., adding or updating items).
 Ensured that responses from the backend were sent back in the console.
 Checked for consistency when data was updated or deleted at different stages in the application.
-- **Testing w/ External Resources:** (N/A YET)
+- **API Testing w/ POSTMAN**
+All API endpoints have been thoroughly tested using Postman. The tests cover the following endpoints:
+
+  **GET** /router.php?action=get&category=todo: Retrieves all to-do items.
+  
+  **POST** /router.php?action=add&category=todo: Adds a new to-do item.
+    
+  **PUT** /router.php?action=update&category=todo: Updates an existing to-do item.
+  
+  **DELETE** /router.php?action=delete&category=todo: Deletes a to-do item.
+  
+The Postman collection containing all the API tests is included in the test/ folder as ToDoAPI.postman_collection.json. This collection can be imported into Postman to run the tests.
    - **UI Testing w/ Selenium:** (N/A YET)
 
 ## Acknowledgments
