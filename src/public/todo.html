@@ -6,9 +6,10 @@ Sources:
     - https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js (for JQuery library)
     - https://www.w3schools.com/html/html_table_headers.asp (for table styling)
     - Quizzer project (for for forms template)
-    - https://quire.io/ (for the idea of the project)
+    - https://quire.io/ (for the idea of the section)
     - https://css-tricks.com/snippets/css/a-guide-to-flexbox/ (for flexbox styling)
     - https://en.wikipedia.org/wiki/Nested_set_model (introduced the structure of a adjacency list)
+    - https://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/ (for the structure of the database)
 
 -->
 <!DOCTYPE html>
@@ -22,14 +23,12 @@ Sources:
 
     <style>
         
-
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f8;
             margin: 0;
             padding: 0;
         }
-
         .main_div {
             width: 90%;
             max-width: 800px;
@@ -47,7 +46,7 @@ Sources:
 
         .btn {
             padding: 8px 12px;
-            background-color: #007bff;
+            background-color: #0c2948;
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -58,17 +57,24 @@ Sources:
             background-color: #0056b3;
         }
 
+        /* Styles for the main to-do list */
         .todo-list {
             list-style-type: none;
             padding-left: 0;
-            margin-top: 20px;
         }
 
+        /* Styles for to-do items */
         .todo-item {
-            display: flex;
-            align-items: center;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
+            margin: 5px 0;
+        }
+
+
+        /* Styles for child items */
+        .child-items {
+            list-style-type: none;
+            padding-left: 20px; /* Indent child items */
+            border-left: 1px dashed #ccc; /* Optional: add a left border for visual hierarchy */
+            margin-left: 10px; /* Adjust as needed */
         }
 
         .todo-item .checkbox {
@@ -84,15 +90,6 @@ Sources:
             gap: 10px;
         }
 
-        .child-items {
-            list-style-type: none;
-            padding-left: 20px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
         /* Modal Styles */
         .modal {
             position: fixed;
@@ -104,6 +101,10 @@ Sources:
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        .hidden {
+            display: none;
         }
 
         .modal-content {
@@ -121,6 +122,7 @@ Sources:
             right: 15px;
             font-size: 24px;
             cursor: pointer;
+            display: none;
         }
 
         form label {
@@ -135,7 +137,27 @@ Sources:
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        
+        /* Styles for the action buttons container */
+        .action-buttons {
+            display: flex;
+            justify-content: center; /* Center the buttons horizontally */
+            gap: 20px; /* Space between the buttons */
+            margin-top: 20px; /* Add some space above the buttons */
+        }
 
+        /* Adjust button styling if needed */
+        .action-buttons .btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .action-buttons .btn:hover {
+            background-color: #1c476f;
+            transform: scale(1.05); /* Subtle hover effect */
+        }
 
 
     </style>
@@ -151,6 +173,12 @@ Sources:
             <ul id="todo-list" class="todo-list">
                 <!-- To-Do items will be inserted here -->
             </ul>
+
+                    <!-- Buttons under the to-do list -->
+            <div class="action-buttons">
+                <button id="btn-home" class="btn">Home</button>
+                <button id="btn-ideas" class="btn">Ideas</button>
+            </div>
         </main>
 
         <!-- Modal popup on top of main content for adding/editing todo -->

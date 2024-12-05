@@ -24,6 +24,16 @@ function addIdea($ideaId, $name, $description, $category, $action_priority) {
     global $dbh;
 
     try {
+        // Check if the idea name already exists
+        $checkStatement = $dbh->prepare('SELECT COUNT(*) FROM IdeasTable WHERE name = :name');
+        $checkStatement->execute([':name' => $name]);
+        $count = $checkStatement->fetchColumn();
+
+        if ($count > 0) {
+            return json_encode(['success' => false, 'error' => 'Idea with this name already exists.']);
+        }
+
+        // Insert the new idea
         $statement = $dbh->prepare(
             'INSERT INTO IdeasTable (name, description, category, action_priority) 
              VALUES (:name, :description, :category, :action_priority)'
@@ -37,11 +47,10 @@ function addIdea($ideaId, $name, $description, $category, $action_priority) {
 
         $id = $dbh->lastInsertId();
 
-        return json_encode(['success (item added)' => true, 'id' => $id]);
+        return json_encode(['success' => true, 'id' => $id]);
 
     } catch (PDOException $e) {
         return json_encode(['success' => false, 'error' => "Error adding idea: " . $e->getMessage()]);
     }
 }
-
 ?>

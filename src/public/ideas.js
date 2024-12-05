@@ -3,7 +3,7 @@ File Name: ideas.js
 Description: Contains the JavaScript functionality for the project.
 Sources: 
     - https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js (for DOM manipulation)
-    - Quiizzer code (for the structure of the code)
+    - Quizzer code (for the structure of the code)
     - Tododles code (for the structure of CRUD operations)
     - https://chatgpt.com (for the structure of the selectIdea function)
 */
@@ -14,6 +14,13 @@ $(document).ready(function(){
   $(document).on('click', '#add-idea', addIdea);
   $(document).on('click', '#remove-idea', removeIdea);
   $(document).on('click', '#update-idea', updateIdea);
+   // Add listeners to the buttons.
+   $(document).on('click', '#home-page', function(){
+    window.location.href = "index.html";
+    });
+    $(document).on('click', '#todo-page', function(){
+        window.location.href = "todo.html";
+    });
 });
 
 
@@ -38,8 +45,9 @@ function fetchIdeas() {
         renderTable([]); // Optionally pass an empty array if the structure is incorrect
       }
     },
-    error: function(jqXHR) {
-      console.error("Failed to fetch ideas:", jqXHR.responseText);
+    error: function(xhr, status, error) {
+      console.error('Error fetching ideas:', error);
+      alert('An error occurred while fetching ideas. Please try again.');
     }
   });
 }
@@ -52,7 +60,7 @@ function renderTable(ideas) {
   // Check if the ideas array is empty
   if (ideas.length === 0) {
       const row = document.createElement("tr");
-      row.innerHTML = `<td colspan="7">No ideas available.</td>`; // Adjust colspan as needed
+      row.innerHTML = `<td colspan="7">No ideas available.</td>`; // Display an info message
       tableBody.appendChild(row);
       return; // Exit the function since there are no ideas to display
   }
@@ -86,12 +94,17 @@ function addIdea() {
     contentType: 'application/json',
     data: JSON.stringify({ name, description, category, priority }),
     success: function() {
-      fetchIdeas(); // Refresh table
+        fetchIdeas(); // Refresh the ideas table
+        // TODO add alert if same name prsent
+    },
+    error: function(xhr, status, error) {
+      console.error('Error adding idea:', error);
+      alert('An error occurred while adding the idea. Please try again.');
     }
   });
 }
 
-// Select an idea to populate form for updating - ChatGBT generated function - see source above
+// Select an idea to populate form for updating - ChatGBT helped generate this function
 function selectIdea(id) {
   selectedIdeaId = id;
   
@@ -102,8 +115,8 @@ function selectIdea(id) {
                         return button && button.getAttribute("onclick") === `selectIdea(${id})`;
                       });
                       // This function finds a specific table row (<tr>) in the table with the ID "ideas-table", 
-                      //where a button inside the row has an onclick attribute matching the string selectIdea(${id}). 
-                      //The ID is passed as an argument to the function.
+                      // Where a button inside the row has an onclick attribute matching the string selectIdea(${id}). 
+                      // The ID is passed as an argument to the function.
 
   if (!idea) {
     console.error(`Idea with ID ${id} not found.`);
@@ -137,6 +150,10 @@ function updateIdea() {
     success: function() {
       fetchIdeas(); // Refresh table
       selectedIdeaId = null; // Clear selected ID
+    },
+    error: function(xhr, status, error) {
+      console.error('Error updating idea:', error);
+      alert('An error occurred while updating the idea. Please try again.');
     }
   });
 }
@@ -149,11 +166,15 @@ function removeIdea() {
   }
 
   $.ajax({
-    url: `/router.php?action=delete&category=ideas&id=${selectedIdeaId}`,
+    url: `../router.php?action=delete&category=ideas&id=${selectedIdeaId}`,
     method: 'DELETE',
     success: function() {
       fetchIdeas(); // Refresh table
       selectedIdeaId = null;
+    },
+    error: function(xhr, status, error) {
+      console.error('Error deleting idea:', error);
+      alert('An error occurred while deleting the idea. Please try again.');
     }
   });
 }

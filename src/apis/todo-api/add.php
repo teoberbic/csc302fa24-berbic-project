@@ -22,33 +22,26 @@ function errorResponse($message) {
 }
 
 
-function addTodo(){
-    $rawInput = file_get_contents('php://input');
-
-    // Decode JSON and store new var
-    $inputData = json_decode($rawInput, true);
-
-    if ($inputData === null && json_last_error() !== JSON_ERROR_NONE) {
-        errorResponse('Invalid JSON input.');
-    }
-
-    // Extract and validate the input data
-    $title = isset($inputData['title']) ? trim($inputData['title']) : ''; // Turnary operator to check if title is set
-    $parent_id = isset($inputData['parent_id']) ? (int)$inputData['parent_id'] : null; // Turnary operator to check if parent_id is set
+function addTodo($title, $parent_id = null){
+    global $dbh;
 
     // Mkae sure the title is not empty
     if (empty($title)) {
         errorResponse('Title is required.');
     }
 
-    // If there is a parent_id present, check if that ID exists in the database
+    // Check if the parent_id exists
     if ($parent_id !== null) {
         try {
             $stmt = $dbh->prepare('SELECT COUNT(*) FROM ToDoTable WHERE id = :parent_id');
-            $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_INT);
-            $stmt->execute();
+            
+            // Execute the statement wsith the parameters
+            $stmt->execute([
+                ':parent_id' => $parent_id
+            ]);
+            
             $parentExists = $stmt->fetchColumn();
-
+    
             if (!$parentExists) {
                 errorResponse('Parent item does not exist.');
             }
@@ -58,16 +51,17 @@ function addTodo(){
     }
 
     try {
-        $stmt = $dbh->prepare('INSERT INTO ToDoTable (title, parent_id) VALUES (:title, :parent_id)');
-        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-        $stmt->bindParam(':parent_id', $parent_id, PDO::PARAM_INT | PDO::PARAM_NULL);
-
-        $stmt->execute();
-
+        $stmt = $dbh->prepare('INSERT INTO ToDoTable (title, parent_id) 
+                                VALUES (:title, :parent_id)');
         
+        $stmt->execute([
+            ':title' => $title,
+            ':parent_id' => $parent_id
+        ]);
+
         $newItemId = $dbh->lastInsertId();
 
-        
+        // Return a success response with the last inserted ID
         echo json_encode(['success' => true, 'id' => $newItemId]);
     } catch (PDOException $e) {
         errorResponse('Database error: ' . $e->getMessage());
