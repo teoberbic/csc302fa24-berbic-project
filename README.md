@@ -335,7 +335,7 @@ Ensured error handling for invalid inputs and actions was displayed correctly.
 Verified that data entered through the UI was correctly sent to the backend (e.g., adding or updating items).
 Ensured that responses from the backend were sent back in the console.
 Checked for consistency when data was updated or deleted at different stages in the application.
-- **API Testing w/ POSTMAN**
+- **API Testing w/ POSTMAN (test/    - folder)**
 All API endpoints have been thoroughly tested using Postman. The tests cover the following endpoints:
 
   **GET** /router.php?action=get&category=todo: Retrieves all to-do items.
@@ -345,9 +345,18 @@ All API endpoints have been thoroughly tested using Postman. The tests cover the
   **PUT** /router.php?action=update&category=todo: Updates an existing to-do item.
   
   **DELETE** /router.php?action=delete&category=todo: Deletes a to-do item.
+
+  **GET** /router.php?action=get&category=ideas: Retrieves all idea items.
   
-The Postman collection containing all the API tests is included in the test/ folder as ToDoAPI.postman_collection.json. This collection can be imported into Postman to run the tests.
-   - **UI Testing w/ Selenium:** (N/A YET)
+  **POST** /router.php?action=add&category=ideas: Adds a new idea item.
+    
+  **PUT** /router.php?action=update&category=ideas: Updates an existing idea item.
+  
+  **DELETE** /router.php?action=delete&category=ideas: Deletes a idea item.
+
+
+  
+The Postman collection containing all the API tests is included in the test/ folder as ToDoAPI.postman_collection.json & ideasAPI.postman_collection.json. These collections can be imported into Postman to run the tests.
 
 ## Acknowledgments
 This project’s structure and functionality were inspired by the Quire task management system, adapted for brand analytics with additional customization by using many outside sources for resource help.
