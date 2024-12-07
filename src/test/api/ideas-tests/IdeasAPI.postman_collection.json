@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "ecc7b1a5-60ac-407a-8c56-c14e39d977c4",
+		"name": "IdeasAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40151339"
+	},
+	"item": [
+		{
+			"name": "Get Idea",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Add Idea",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"category\": \"Social Media Posts\",\n    \"description\": \"make a festive post\",\n    \"name\": \"Festive Instagram Reel\",\n    \"priority\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/src/router.php?action=add&category=ideas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"src",
+						"router.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "add"
+						},
+						{
+							"key": "category",
+							"value": "ideas"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Idea",
+			"request": {
+				"method": "PUT",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Del Idea",
+			"request": {
+				"method": "DELETE",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
