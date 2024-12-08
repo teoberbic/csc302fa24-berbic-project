@@ -1,0 +1,214 @@
+{
+	"info": {
+		"_postman_id": "666b1851-a52a-42c6-b803-c04b805e69f7",
+		"name": "ToDoAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40151339"
+	},
+	"item": [
+		{
+			"name": "Del Todo",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://digdug.cs.endicott.edu/~tberbic/csc302fa24-berbic-project/src/router.php?action=delete&category=todo",
+					"protocol": "https",
+					"host": [
+						"digdug",
+						"cs",
+						"endicott",
+						"edu"
+					],
+					"path": [
+						"~tberbic",
+						"csc302fa24-berbic-project",
+						"src",
+						"router.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "delete"
+						},
+						{
+							"key": "category",
+							"value": "todo"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Todo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Social Media Story Festive\",\n  \"parent_id\": null\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://digdug.cs.endicott.edu/~tberbic/csc302fa24-berbic-project/src/router.php?action=add&category=todo",
+					"protocol": "https",
+					"host": [
+						"digdug",
+						"cs",
+						"endicott",
+						"edu"
+					],
+					"path": [
+						"~tberbic",
+						"csc302fa24-berbic-project",
+						"src",
+						"router.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "add"
+						},
+						{
+							"key": "category",
+							"value": "todo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Todo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://digdug.cs.endicott.edu/~tberbic/csc302fa24-berbic-project/src/router.php?action=get&category=todo",
+					"protocol": "https",
+					"host": [
+						"digdug",
+						"cs",
+						"endicott",
+						"edu"
+					],
+					"path": [
+						"~tberbic",
+						"csc302fa24-berbic-project",
+						"src",
+						"router.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "get"
+						},
+						{
+							"key": "category",
+							"value": "todo"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Todo",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"4\",\n    \"completed\": \"true\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://digdug.cs.endicott.edu/~tberbic/csc302fa24-berbic-project/src/router.php?action=update&category=todo",
+					"protocol": "https",
+					"host": [
+						"digdug",
+						"cs",
+						"endicott",
+						"edu"
+					],
+					"path": [
+						"~tberbic",
+						"csc302fa24-berbic-project",
+						"src",
+						"router.php"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "update"
+						},
+						{
+							"key": "category",
+							"value": "todo"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
