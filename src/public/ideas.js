@@ -6,6 +6,7 @@ Sources:
     - Quizzer code (for the structure of the code)
     - Tododles code (for the structure of CRUD operations)
     - https://chatgpt.com (for the structure of the selectIdea function)
+    - VSCode Copilot (for comments describing the code)
 */
 $(document).ready(function(){
 
@@ -28,7 +29,11 @@ let selectedIdeaId = null;
 
 
 
-// Function to fetch and display all ideas
+/**
+ * Fetches and displays all ideas from the database.
+ *
+ * @return JSON response containing the list of ideas or an error message.
+ */
 function fetchIdeas() {
   $.ajax({
     url: '../router.php?action=get&category=ideas',
@@ -52,7 +57,13 @@ function fetchIdeas() {
   });
 }
 
-// Render ideas into the table
+/**
+ * Renders ideas into the table by populating rows with the given data.
+ *
+ * @param ideas An array of ideas to be displayed in the table.
+ *
+ * @return void.
+ */
 function renderTable(ideas) {
   const tableBody = document.getElementById("ideas-table").querySelector("tbody");
   tableBody.innerHTML = ""; // Clear existing rows
@@ -81,7 +92,11 @@ function renderTable(ideas) {
 }
 
 
-// Add a new idea
+/**
+ * Adds a new idea to the database.
+ *
+ * @return void. Refreshes the ideas table upon successful addition.
+ */
 function addIdea() {
   const name = document.getElementById("name").value;
   const description = document.getElementById("description").value;
@@ -104,7 +119,13 @@ function addIdea() {
   });
 }
 
-// Select an idea to populate form for updating - ChatGBT helped generate this function
+/**
+ * Selects an idea by its ID and populates the form fields for updating.
+ *
+ * @param id The ID of the idea to be selected and loaded into the form.
+ *
+ * @return void. Populates the form fields with the selected idea's data or logs an error if not found.
+ */
 function selectIdea(id) {
   selectedIdeaId = id;
   
@@ -114,10 +135,8 @@ function selectIdea(id) {
                         const button = row.querySelector("button");
                         return button && button.getAttribute("onclick") === `selectIdea(${id})`;
                       });
-                      // This function finds a specific table row (<tr>) in the table with the ID "ideas-table", 
-                      // Where a button inside the row has an onclick attribute matching the string selectIdea(${id}). 
-                      // The ID is passed as an argument to the function.
 
+  // Check if the idea row was found
   if (!idea) {
     console.error(`Idea with ID ${id} not found.`);
     return;
@@ -130,7 +149,11 @@ function selectIdea(id) {
   document.getElementById("action_priority").value = idea.cells[3].textContent;
 }
 
-// Update an existing idea
+/**
+ * Updates an existing idea in the database.
+ *
+ * @return void. Refreshes the ideas table and clears the selected idea ID upon successful update.
+ */
 function updateIdea() {
   if (!selectedIdeaId) {
     console.log("Please select an idea to update.");
@@ -158,7 +181,12 @@ function updateIdea() {
   });
 }
 
-// Delete the selected idea
+
+/**
+ * Deletes the selected idea from the database.
+ *
+ * @return void. Refreshes the ideas table and clears the selected idea ID upon successful deletion.
+ */
 function removeIdea() {
   if (!selectedIdeaId) {
     alert("Please select an idea to remove.");
@@ -170,7 +198,7 @@ function removeIdea() {
     method: 'DELETE',
     success: function() {
       fetchIdeas(); // Refresh table
-      selectedIdeaId = null;
+      selectedIdeaId = null; // Clear selected ID
     },
     error: function(xhr, status, error) {
       console.error('Error deleting idea:', error);

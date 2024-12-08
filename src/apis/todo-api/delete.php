@@ -1,45 +1,62 @@
 <?php
-// delete.php
+    // delete.php
 
-/*
- * File Name: delete.php
- * Description: Handles deleting to-do items from the ToDoTable, including any hierarchical child items.
- */
+    /*
+    * File Name: delete.php
+    * Description: Handles deleting to-do items from the ToDoTable, including any hierarchical child items.
+    * Sources:
+    *       - VSCode Copilot (for comments describing the code)
+    */
 
-require_once __DIR__ . '/../../db/db.php';
+    require_once __DIR__ . '/../../db/db.php';
 
-header('Content-Type: application/json');
+    header('Content-Type: application/json');
 
-// Function to return an error message as JSON
-
-function deleteTodoItem($id){
-    global $dbh;
-    // Validate the id
-    if (empty($id)) {
-        errorResponse('ID is required.');
+    /**
+     * Sends an error response in JSON format and exits the script.
+     *
+     * @param string $message The error message to include in the response.
+     *
+     * @return void.
+     */
+    function errorResponse($message) {
+        echo json_encode(['success' => false, 'error' => $message]);
+        exit;
     }
 
-    try {
-        // Check if the item exists
-        $stmt = $dbh->prepare('SELECT COUNT(*) FROM ToDoTable WHERE id = :id');
-        $stmt->execute(
-            [':id' => $id]);
-        $itemExists = $stmt->fetchColumn();
+    /**
+     * Deletes a to-do item and its hierarchical child items from the database.
+     *
+     * @param int $id The ID of the to-do item to delete.
+     *
+     * @return void. Outputs a JSON response indicating success or failure.
+     */
+    function deleteTodoItem($id) {
+        global $dbh;
 
-        if (!$itemExists) {
-            errorResponse('To-Do item not found.');
+        // Validate the ID
+        if (empty($id)) {
+            errorResponse('ID is required.');
         }
 
-        // Delete the item (child items will be deleted automatically if ON DELETE CASCADE is set)
-        $stmt = $dbh->prepare('DELETE FROM ToDoTable WHERE id = :id');
-        $stmt->execute([':id' => $id]);
+        try {
+            // Check if the item exists
+            $stmt = $dbh->prepare('SELECT COUNT(*) FROM ToDoTable WHERE id = :id');
+            $stmt->execute([':id' => $id]);
+            $itemExists = $stmt->fetchColumn();
 
-        // Return a success response
-        echo json_encode(['success' => true, 'message' => 'To-Do item deleted successfully.']);
-    } catch (PDOException $e) {
-        errorResponse('Database error: ' . $e->getMessage());
+            if (!$itemExists) {
+                errorResponse('To-Do item not found.');
+            }
+
+            // Delete the item (child items will be deleted automatically if ON DELETE CASCADE is set)
+            $stmt = $dbh->prepare('DELETE FROM ToDoTable WHERE id = :id');
+            $stmt->execute([':id' => $id]);
+
+            // Return a success response
+            echo json_encode(['success' => true, 'message' => 'To-Do item deleted successfully.']);
+        } catch (PDOException $e) {
+            errorResponse('Database error: ' . $e->getMessage());
+        }
     }
-}
 ?>
-
-

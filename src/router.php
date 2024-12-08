@@ -1,17 +1,18 @@
 <?php
 /*
 File Name: router.php
-Description: The router.php that redirects requests to specific API action handlers depending on category and action sent in.
+Description: Routes API requests to the appropriate handlers based on the `category` and `action` provided in the request.
 Sources: 
-    - https://chatgpt.com (null coalescing operator (?? operator) as cleaner alternative to if-else)
+    - https://chatgpt.com (null coalescing operator (?? operator) as a cleaner alternative to if-else)
     - ChatGPT (isset() function to check if a variable is set and is not NULL)
     - https://www.w3schools.com/php/php_switch.asp (switch statements instead of if-else for cleaner code) 
-    - VSCode Copilot (for suggesting the use of file_get_contents("php://input"), i think it looks cleaner than using $_POST)
-
+    - VSCode Copilot (suggested the use of file_get_contents("php://input") as a cleaner alternative to $_POST)
+    - VSCode Copilot (for comments describing the code)
 */
+
 header('Content-Type: application/json');
 
-// Include necessary files
+// Include the necessary API files for handling ideas and to-do operations
 require_once 'apis/ideas-api/add.php';
 require_once 'apis/ideas-api/delete.php';
 require_once 'apis/ideas-api/update.php';
@@ -21,102 +22,91 @@ require_once 'apis/todo-api/delete.php';
 require_once 'apis/todo-api/update.php';
 require_once 'apis/todo-api/get.php';
 
-// Get the action and category from the request
-$action = $_GET['action'] ?? '';
-$category = $_GET['category'] ?? ''; // 'ideas' or 'todo'
-$id = $_GET['id'] ?? null; // Do this for all the actions that require an id
+// Extract the action and category from the query parameters
+$action = $_GET['action'] ?? ''; // Default to an empty string if not provided
+$category = $_GET['category'] ?? ''; // Category can be 'ideas' or 'todo'
+$id = $_GET['id'] ?? null; // Extract the ID if provided, used for update and delete operations
 
-// Route based on the action and category
+// Route requests based on the category (e.g., 'ideas' or 'todo')
 switch ($category) {
-    case 'ideas':
+    case 'ideas': // Handle API actions related to ideas
         switch ($action) {
-            case 'add':
-                // Reads the raw JSON data from the request body.
-                // Decodes this JSON into a PHP associative array, which is stored in $data.
-                $data = json_decode(file_get_contents("php://input"), true);  // VSCode Copilot suggested this cleaner alternative to $_POST
-                
-                // Pass the decoded data to the addIdea function
+            case 'add': // Handle adding an idea
+                $data = json_decode(file_get_contents("php://input"), true); // Parse the input JSON as an associative array
                 echo json_encode(addIdea(
-                    $data['ideaId'] ?? null,  // If i want to add sub-ideas, i can use this field
-                    $data['name'],
-                    $data['description'],
-                    $data['category'],
-                    $data['priority']));
-                    break;
-                
-            case 'update':
-                $data = json_decode(file_get_contents("php://input"), true); // VSCode Copilot suggested this cleaner alternative to $_POST
-                
-                // Pass the decoded data and id to the updateIdea function
+                    $data['ideaId'] ?? null, // Handle sub-ideas using this field if provided
+                    $data['name'], 
+                    $data['description'], 
+                    $data['category'], 
+                    $data['priority']
+                ));
+                break;
+
+            case 'update': // Handle updating an idea
+                $data = json_decode(file_get_contents("php://input"), true);
                 echo json_encode(updateIdea(
-                    $id,  // Use the captured id
-                    $data['name'],
-                    $data['description'],
-                    $data['category'],
-                    $data['priority']));
+                    $id, // Pass the extracted ID
+                    $data['name'], 
+                    $data['description'], 
+                    $data['category'], 
+                    $data['priority']
+                ));
                 break;
 
-            case 'get':
-                // Handle the 'get' action for ideas
-                echo getIdeas();
+            case 'get': // Handle retrieving all ideas
+                echo json_encode(getIdeas()); // Fetch ideas from the database
                 break;
 
-            case 'delete':
-                // Handle the 'delete' action for ideas
-                echo json_encode(deleteIdea($id));
+            case 'delete': // Handle deleting an idea
+                echo json_encode(deleteIdea($id)); // Call the delete function with the ID
                 break;
 
-            default:
-                http_response_code(404);
-                echo json_encode(['message' => 'Action not found for ideas']);
+            default: // Handle unsupported actions for ideas
+                http_response_code(404); // Set the HTTP response code to 404 (Not Found)
+                echo json_encode(['message' => 'Action not found for ideas']); // Return an error message
                 break;
         }
         break;
 
-    case 'todo':
+    case 'todo': // Handle API actions related to to-do items
         switch ($action) {
-            case 'add':
-                // Handle the 'add' action for todo items
-                // ChatGPT suggested using the null coalescing operator (??) as a cleaner alternative to if-else
-                // ChatGPT isset() function to check if a variable is set and is not NULL
-                $input = json_decode(file_get_contents('php://input'), true); // Decode as associative array
-                $title = isset($input['title']) ? trim($input['title']) : '';
-                $parent_id = isset($input['parent_id']) ? (int)$input['parent_id'] : null;
-                
-                if ($title) {
-                    addTodo($title, $parent_id);
+            case 'add': // Handle adding a to-do item
+                $input = json_decode(file_get_contents('php://input'), true); // Parse the input JSON
+                $title = isset($input['title']) ? trim($input['title']) : ''; // Extract and trim the title
+                $parent_id = isset($input['parent_id']) ? (int)$input['parent_id'] : null; // Extract and cast parent_id
+
+                if ($title) { // Ensure title is provided
+                    addTodo($title, $parent_id); // Add the to-do item
                 } else {
-                    http_response_code(400);
-                    echo json_encode(['message' => 'Title is required']);
+                    http_response_code(400); // Set the HTTP response code to 400 (Bad Request)
+                    echo json_encode(['message' => 'Title is required']); // Return an error message
                 }
                 break;
 
-            case 'delete': 
-                // Handle the 'delete' action for todo items
-                $data = json_decode(file_get_contents("php://input"), true); // VSCode Copilot suggested this cleaner alternative to $_POST
-                json_encode(deleteTodoItem($data['id']));
+            case 'delete': // Handle deleting a to-do item
+                $data = json_decode(file_get_contents("php://input"), true);
+                json_encode(deleteTodoItem($data['id'])); // Call the delete function with the ID
                 break;
 
-            case 'update':
-                // Handle the 'update' action for todo items
-                $input = json_decode(file_get_contents('php://input'), true); // VSCode Copilot suggested this cleaner alternative to $_POST
-                updateTodo($input);
+            case 'update': // Handle updating a to-do item
+                $input = json_decode(file_get_contents('php://input'), true);
+                updateTodo($input); // Pass the input data to the update function
                 break;
-            case 'get':
 
-                // Handle the 'get' action for todo items
-                echo json_encode(fetchTodos());
+            case 'get': // Handle retrieving all to-do items
+                echo fetchTodos(); // Fetch to-do items from the database
                 break;
-                
-            default:
-                http_response_code(404);
-                echo json_encode(['message' => 'Action not found for todo']);
+
+            default: // Handle unsupported actions for to-do items
+                http_response_code(404); // Set the HTTP response code to 404 (Not Found)
+                echo json_encode(['message' => 'Action not found for todo']); // Return an error message
                 break;
         }
         break;
 
-    default:
-        http_response_code(404);
-        echo json_encode(['message' => 'Category not found']);
+    default: // Handle unsupported categories
+        http_response_code(404); // Set the HTTP response code to 404 (Not Found)
+        echo json_encode(['message' => 'Category not found']); // Return an error message
         break;
 }
+?>

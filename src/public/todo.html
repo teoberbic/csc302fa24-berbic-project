@@ -1,25 +1,30 @@
 <!--
 File Name: todo.html
-Description: This is the ideas page for the project.
+Description: This is the To-Do List page for the project.
 Sources: 
     - https://chatgpt.com (for CSS styling & this header comment)
     - https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js (for JQuery library)
     - https://www.w3schools.com/html/html_table_headers.asp (for table styling)
-    - Quizzer project (for for forms template)
+    - Quizzer project (for forms template)
     - https://quire.io/ (for the idea of the section)
     - https://css-tricks.com/snippets/css/a-guide-to-flexbox/ (for flexbox styling)
-    - https://en.wikipedia.org/wiki/Nested_set_model (introduced the structure of a adjacency list)
+    - https://en.wikipedia.org/wiki/Nested_set_model (introduced the structure of an adjacency list)
     - https://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/ (for the structure of the database)
-
+    - VSCode Copilot (for comments describing the code)
 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
+
+    <!-- Include the JavaScript file for handling To-Do functionality -->
     <script src="todo.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!--JQUERY Link-->
+    
+    <!-- Include JQuery library for simplified DOM manipulation -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 
     <style>
         
@@ -164,24 +169,27 @@ Sources:
 </head>
 <body>
     <div class="main_div">
+        <!-- Header section -->
         <header>
             <h1>To-Do's</h1>
             <button id="add-root-item" class="btn">Add Item</button>
         </header>
 
+        <!-- Main content section -->
         <main>
+            <!-- Container for To-Do list -->
             <ul id="todo-list" class="todo-list">
-                <!-- To-Do items will be inserted here -->
+                <!-- Dynamic To-Do items will be inserted here -->
             </ul>
 
-                    <!-- Buttons under the to-do list -->
+            <!-- Navigation buttons -->
             <div class="action-buttons">
                 <button id="btn-home" class="btn">Home</button>
                 <button id="btn-ideas" class="btn">Ideas</button>
             </div>
         </main>
 
-        <!-- Modal popup on top of main content for adding/editing todo -->
+        <!-- Modal for adding/editing items -->
         <div id="modal" class="modal hidden">
             <div class="modal-content">
                 <span id="close-modal" class="close">x</span> <!-- Close button -->
@@ -189,13 +197,11 @@ Sources:
                 <form id="item-form">
                     <label for="item-title">Title:</label>
                     <input type="text" id="item-title" name="title" required>
-                    <input type="hidden" id="parent-id" name="parent_id"> <!-- Hidden input for parent ID so it is not displayed to screen -->
+                    <input type="hidden" id="parent-id" name="parent_id"> <!-- Hidden input for parent ID -->
                     <button type="submit" class="btn">Save</button>
                 </form>
             </div>
         </div>
-        
     </div>
-
 </body>
 </html>

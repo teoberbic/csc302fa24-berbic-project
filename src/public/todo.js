@@ -8,6 +8,7 @@
  *    - copilot.ai (for template creation with the createTodoItem function)
  *    - https://mikehillyer.com/articles/managing-hierarchical-data-in-mysql/ (for the hierarchical structure of the to-do items)
  *    - https://www.youtube.com/watch?v=FVTBluc7AeM (creating a modal)
+ *    - VSCode Copilot (for comments describing the code)
  */
 
 document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from jQuery to vanilla JavaScript for this structure of code
@@ -60,16 +61,21 @@ document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from j
         }
     });
 
-    // Function to fetch to-do items from the REST API
+    /**
+     * Fetches to-do items from the REST API and updates the to-do list on the page.
+     *
+     * @return void. Populates the to-do list with items retrieved from the server or logs an error on failure.
+     */
     function fetchTodos() {
         $.ajax({
             url: '../router.php?action=get&category=todo',
             method: 'GET',
             success: function(data) {
-                todoList.innerHTML = '';
-                data.forEach(item => {
-                    const li = createTodoItem(item);
-                    todoList.appendChild(li);
+                console.log(data);
+                todoList.innerHTML = ''; // Clear the existing to-do list
+                data['todos'].forEach(item => {
+                    const li = createTodoItem(item); // Create a to-do item element
+                    todoList.appendChild(li); // Append it to the to-do list
                 });
             },
             error: function(error) {
@@ -78,9 +84,14 @@ document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from j
         });
     }
 
-    // Function to create a to-do item element
-    // This function is recursive and will create child items if they exist
-    // ChatGP helped immensely with all of this function
+
+        /**
+     * Creates a to-do item element, including its title, actions, and nested child items (if any).
+     *
+     * @param item An object representing a to-do item, including its title, status, and child items.
+     *
+     * @return HTMLElement. A fully constructed `<li>` element representing the to-do item and its children.
+     */
     function createTodoItem(item) {
         const li = document.createElement('li'); // Create a new list item element
         li.classList.add('todo-item');
@@ -139,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from j
             const childUl = document.createElement('ul');
             childUl.classList.add('child-items');
             item.children.forEach(child => {
-                const childLi = createTodoItem(child);
+                const childLi = createTodoItem(child); // Recursive call for child items
                 childUl.appendChild(childLi);
             });
             li.appendChild(childUl);
@@ -148,32 +159,53 @@ document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from j
         return li;
     }
 
-    // Function to open the modal
+
+    /**
+     * Opens the modal for adding or editing a to-do item.
+     *
+     * @param parentId The ID of the parent item, used when adding a new sub-item. Defaults to null.
+     * @param item An object representing the to-do item being edited. If null, the modal is used for adding a new item.
+     *
+     * @return void. Displays the modal and pre-fills fields based on the provided item or parent ID.
+     */
     function openModal(parentId = null, item = null) {
-        modal.classList.remove('hidden');
+        modal.classList.remove('hidden'); // Show the modal
         if (item) {  // If an item is provided, it's an edit operation
             modalTitle.textContent = 'Edit Item';
-            document.getElementById('item-title').value = item.title;
-            parentIdInput.value = item.parent_id || '';
-            itemForm.dataset.itemId = item.id; // Store the item ID in the form's dataset
+            document.getElementById('item-title').value = item.title; // Populate the title field with the item's title
+            parentIdInput.value = item.parent_id || ''; // Populate the parent ID field if it exists
+            itemForm.dataset.itemId = item.id; // Store the item ID in the form's dataset for later reference
         } else { // Otherwise, it's an add operation
             modalTitle.textContent = 'Add New Item';
-            document.getElementById('item-title').value = '';
-            parentIdInput.value = parentId;
-            delete itemForm.dataset.itemId; // Ensure no item ID is stored
+            document.getElementById('item-title').value = ''; // Clear the title field for a new item
+            parentIdInput.value = parentId; // Set the parent ID field
+            delete itemForm.dataset.itemId; // Ensure no item ID is stored in the dataset
         }
     }
 
-    // Function to close the modal
+
+        /**
+     * Closes the modal and resets its contents to the default state.
+     *
+     * @return void. Hides the modal, clears the form, and resets the modal title and dataset.
+     */
     function closeModalFunc() {
-        modal.classList.add('hidden');
-        itemForm.reset();
-        parentIdInput.value = '';
-        modalTitle.textContent = 'Add New Item';
+        modal.classList.add('hidden'); // Hide the modal
+        itemForm.reset(); // Reset all form fields
+        parentIdInput.value = ''; // Clear the parent ID input
+        modalTitle.textContent = 'Add New Item'; // Reset the modal title to the default
         delete itemForm.dataset.itemId; // Clear the item ID from the form's dataset
     }
 
-    // Function to add a new item via the API
+
+        /**
+     * Adds a new to-do item via the API.
+     *
+     * @param title The title of the new to-do item.
+     * @param parent_id The ID of the parent item, used for adding sub-items (optional).
+     *
+     * @return void. Refreshes the to-do list upon successful addition or logs an error on failure.
+     */
     function addItem(title, parent_id) {
         $.ajax({
             url: '../router.php?action=add&category=todo',
@@ -182,18 +214,26 @@ document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from j
             data: JSON.stringify({ title: title, parent_id: parent_id }),
             success: function(data) {
                 if (data.success) {
-                    fetchTodos();
+                    fetchTodos(); // Refresh the to-do list
                 } else {
-                    alert('Error adding item.');
+                    alert('Error adding item.'); // Display an alert if the addition fails
                 }
             },
             error: function(error) {
-                console.error('Error adding item:', error);
+                console.error('Error adding item:', error); // Log any error encountered during the API call
             }
         });
     }
 
-    // Function to update an existing item via the API
+
+        /**
+     * Updates an existing to-do item via the API.
+     *
+     * @param id The ID of the to-do item to update.
+     * @param data An object containing the updated fields for the item.
+     *
+     * @return void. Refreshes the to-do list upon successful update or logs an error on failure.
+     */
     function updateItem(id, data) {
         data.id = id; // Ensure the ID is included in the data sent to the server
         $.ajax({
@@ -203,20 +243,27 @@ document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from j
             data: JSON.stringify(data),
             success: function(response) {
                 if (response.success) {
-                    fetchTodos();
+                    fetchTodos(); // Refresh the to-do list
                 } else {
-                    alert('Error updating item.');
+                    alert('Error updating item.'); // Display an alert if the update fails
                 }
             },
             error: function(error) {
-                console.error('Error updating item:', error);
+                console.error('Error updating item:', error); // Log any error encountered during the API call
             }
         });
     }
 
-    // Function to toggle the completion status of an item
+
+        /**
+     * Toggles the completion status of a to-do item via the API.
+     *
+     * @param id The ID of the to-do item to update.
+     * @param completed A boolean indicating whether the item is completed.
+     *
+     * @return void. Updates the item's completion status or logs an error on failure.
+     */
     function toggleComplete(id, completed) {
-        console.log("got here");
         $.ajax({
             url: '../router.php?action=update&category=todo',
             method: 'PUT',
@@ -224,34 +271,42 @@ document.addEventListener('DOMContentLoaded', () => { // ChatGPT: Changed from j
             data: JSON.stringify({ id, completed }),
             success: function(data) {
                 if (!data.success) {
-                    alert('Error updating item.');
+                    alert('Error updating item.'); // Display an alert if the update fails
                 }
             },
             error: function(error) {
-                console.error('Error updating item:', error);
+                console.error('Error updating item:', error); // Log any error encountered during the API call
             }
         });
     }
 
-    // Function to delete an item via the API
+
+        /**
+     * Deletes a to-do item and all its sub-items via the API.
+     *
+     * @param id The ID of the to-do item to delete.
+     *
+     * @return void. Refreshes the to-do list upon successful deletion or logs an error on failure.
+     */
     function deleteItem(id) {
-        if (confirm('Are you sure you want to delete this item and all its sub-items?')) {  // Display a confirmation dialog before deleting
+        if (confirm('Are you sure you want to delete this item and all its sub-items?')) { // Display a confirmation dialog
             $.ajax({
                 url: '../router.php?action=delete&category=todo',
                 method: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({id }),
+                data: JSON.stringify({ id }),
                 success: function(data) {
                     if (data.success) {
-                        fetchTodos();
+                        fetchTodos(); // Refresh the to-do list
                     } else {
-                        alert('Error deleting item.');
+                        alert('Error deleting item.'); // Display an alert if the deletion fails
                     }
                 },
                 error: function(error) {
-                    console.error('Error deleting item:', error);
+                    console.error('Error deleting item:', error); // Log any error encountered during the API call
                 }
             });
         }
     }
+
 });
